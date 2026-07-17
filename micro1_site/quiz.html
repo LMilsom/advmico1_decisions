@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Session 1 Quiz — Advanced Microeconomics 1</title>
+<!--
+  SET-UP (instructor): paste your deployed Apps Script web-app URL into
+  CONFIG.endpoint below (see instrument/INSTRUMENT.md, section 3). Responses
+  then upload automatically on the final screen. If the endpoint is empty or
+  unreachable, the page falls back to a downloadable file the student uploads
+  to the location named in CONFIG.fallbackUpload.
+-->
+<style>
+  :root{
+    --ink:#1F2A33; --teal0:#0E6E71; --teal1:#E5F0F0; --rust:#B14A4E;
+    --sand:#F6F3EC; --grayline:#8E9AA3; --rule:#DFE4E7;
+    --sans:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; padding:0 1.25rem 4rem; font-family:var(--sans); font-size:16px;
+       line-height:1.55; color:var(--ink); background:#fff; font-variant-numeric:tabular-nums}
+  .wrap{max-width:660px; margin:0 auto}
+  .masthead{padding:2.5rem 0 1rem}
+  .eyebrow{font-size:11px; font-weight:600; letter-spacing:.16em; text-transform:uppercase;
+           color:var(--teal0); margin:0 0 .7rem}
+  h1{margin:0; font-size:1.6rem; font-weight:700; letter-spacing:-.02em}
+  .rule{border:0; border-top:1.5px solid var(--teal0); margin:1.2rem 0 0}
+
+  .bar{height:5px; background:var(--teal1); border-radius:3px; margin:1.4rem 0 0; overflow:hidden}
+  .bar > div{height:100%; width:0%; background:var(--teal0); transition:width .25s ease}
+  .step{font-size:12px; color:var(--grayline); margin:.5rem 0 0; letter-spacing:.05em}
+
+  .card{margin-top:1.5rem; padding:1.5rem; background:var(--sand); border-radius:4px}
+  .card h2{margin:0 0 .8rem; font-size:1.05rem; font-weight:700}
+  .card p{margin:.6rem 0 0}
+  .q{font-weight:600}
+  .muted{color:var(--grayline); font-size:13.5px}
+  b.hl{color:var(--teal0)}
+
+  input[type=number], input[type=text]{
+    font:inherit; font-family:var(--mono); font-size:17px;
+    padding:.55rem .7rem; border:1.5px solid var(--grayline); border-radius:3px;
+    width:9.5rem; margin-top:.8rem; background:#fff;
+  }
+  input:focus{outline:2px solid var(--teal0); border-color:var(--teal0)}
+  .choices{display:flex; gap:.6rem; margin-top:.9rem; flex-wrap:wrap}
+  .choices button{
+    font:inherit; font-weight:600; padding:.6rem 1.2rem; border-radius:3px;
+    border:1.5px solid var(--teal0); background:#fff; color:var(--teal0); cursor:pointer;
+  }
+  .choices button:hover{background:var(--teal0); color:#fff}
+  .nav{display:flex; gap:.6rem; margin-top:1.2rem; align-items:center}
+  .next{
+    font:inherit; font-weight:700; padding:.65rem 1.4rem; border-radius:3px;
+    border:0; background:var(--teal0); color:#fff; cursor:pointer;
+  }
+  .next:hover{background:var(--ink)}
+  .err{color:var(--rust); font-size:13.5px; margin-left:.4rem; display:none}
+
+  .done{border-left:3px solid var(--teal0); padding-left:1rem; margin-top:1.5rem}
+  .dlbtn{display:inline-block; margin-top:1rem; font-weight:700; color:var(--teal0);
+         border:1.5px solid var(--teal0); border-radius:3px; padding:.55rem 1rem;
+         text-decoration:none; background:#fff; cursor:pointer; font-size:15px}
+  code{font-family:var(--mono); font-size:13.5px; background:var(--teal1); padding:.1rem .35rem; border-radius:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="masthead">
+  <p class="eyebrow">Advanced Microeconomics 1 · Session 1</p>
+  <h1>A short decision quiz</h1>
+  <hr class="rule">
+  <div class="bar"><div id="prog"></div></div>
+  <p class="step" id="step"></p>
+</header>
+<div id="stage"></div>
+</div>
+
+<script>
+"use strict";
+
+const CONFIG = {
+  endpoint: "",   // <-- paste Apps Script web-app URL here; empty = download fallback
+  fallbackUpload: "the Session 1 dropbox on the course Moodle page",
+};
+
+// per-round payout rates (euros per token)
+const ROUNDS = [
+    {r:1,q1:1.919,q2:0.464},
+    {r:2,q1:0.265,q2:0.844},
+    {r:3,q1:1.241,q2:0.589},
+    {r:4,q1:0.353,q2:0.900},
+    {r:5,q1:0.479,q2:1.741},
+    {r:6,q1:0.343,q2:0.357},
+    {r:7,q1:0.516,q2:1.111},
+    {r:8,q1:0.412,q2:0.360},
+    {r:9,q1:0.630,q2:0.387},
+    {r:10,q1:0.316,q2:0.317},
+    {r:11,q1:1.501,q2:0.666},
+    {r:12,q1:1.909,q2:0.818},
+    {r:13,q1:0.597,q2:0.583},
+    {r:14,q1:1.240,q2:1.461},
+    {r:15,q1:0.898,q2:0.511},
+    {r:16,q1:1.412,q2:1.812},
+    {r:17,q1:1.126,q2:0.636},
+    {r:18,q1:0.802,q2:0.312},
+    {r:19,q1:0.516,q2:1.276},
+    {r:20,q1:0.635,q2:0.923},
+    {r:21,q1:1.031,q2:0.386},
+    {r:22,q1:1.915,q2:0.260},
+    {r:23,q1:0.608,q2:0.724},
+    {r:24,q1:0.353,q2:0.900},
+    {r:25,q1:1.909,q2:0.818}
+];
+
+const GOODS = ["search", "email", "maps", "social"];
+const GOOD_LABEL = {search:"internet search engines", email:"personal email",
+                    maps:"digital maps and navigation", social:"social media"};
+const FRAME = {A:{search:"WTA", email:"WTP", maps:"WTA", social:"WTP"},
+               B:{search:"WTP", email:"WTA", maps:"WTP", social:"WTA"}};
+
+const R = {schema:"micro1-quiz-v1", started:new Date().toISOString()};
+let steps = [];
+let i = 0;
+
+const stage = document.getElementById("stage");
+const prog = document.getElementById("prog");
+const stepLbl = document.getElementById("step");
+
+function render(){
+  const s = steps[i];
+  prog.style.width = (100 * i / steps.length) + "%";
+  stepLbl.textContent = s.label || `Question ${i} of ${steps.length - 1}`;
+  stage.innerHTML = s.html();
+  const el = stage.querySelector("input");
+  if (el) { el.focus();
+    el.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); s.next && s.next(); } });
+  }
+  if (s.bind) s.bind();
+}
+function fail(msg){ const e = stage.querySelector(".err"); e.textContent = msg; e.style.display = "inline"; }
+function advance(){ i += 1; render(); window.scrollTo(0, 0); }
+function numVal(id, lo, hi){
+  const v = parseFloat(document.getElementById(id).value);
+  if (!isFinite(v) || v < lo || v > hi) return null;
+  return v;
+}
+function choiceStep(key, html, opts){
+  return { label:null, html: () => html + `<div class="choices">` +
+      opts.map(o => `<button data-v="${o.v}">${o.t}</button>`).join("") + `</div>`,
+    bind(){ stage.querySelectorAll("button[data-v]").forEach(b =>
+      b.addEventListener("click", () => { R[key] = b.dataset.v; advance(); })); } };
+}
+
+// ---- intro + ID ----
+steps.push({ label:"Before you start", html: () => `
+  <div class="card">
+    <h2>Twenty minutes of decisions</h2>
+    <p>Around thirty short questions: allocation problems and a few quick choices.
+       <b class="hl">There are no right answers</b> — choose what you actually prefer.</p>
+    <p>Your responses are <b>anonymous</b>, ungraded, and become part of a class dataset
+       this course returns to during the term. You may stop at any point without penalty;
+       partial responses are discarded.</p>
+    <p class="muted">Work alone and in one sitting. Numbers can be entered with decimals.</p>
+    <div class="nav"><button class="next" id="go">Begin</button></div>
+  </div>`,
+  bind(){ document.getElementById("go").addEventListener("click", advance); } });
+
+steps.push({ label:"Your anonymous ID", html: () => `
+  <div class="card">
+    <p class="q">Make up a <b>random ID</b> for yourself — letters and numbers, 4 to 12 characters.</p>
+    <p class="muted">Pick something distinctive (not <code>1234</code> or your name) and <b>write it down</b> —
+       you will need it again later in the course.</p>
+    <input type="text" id="sid" maxlength="12" autocomplete="off" placeholder="e.g. TEAL7K2">
+    <div class="nav"><button class="next" id="n">Continue</button><span class="err"></span></div>
+  </div>`,
+  bind(){ this.next = () => {
+      const v = document.getElementById("sid").value.trim().toUpperCase();
+      if (!/^[A-Z0-9]{4,12}$/.test(v)) return fail("Letters and numbers only, 4 to 12 characters.");
+      R.id = v;
+      const h = [...v].reduce((a, c) => a + c.charCodeAt(0), 0);
+      R.version = (h % 2 === 1) ? "A" : "B";
+      advance(); };
+    document.getElementById("n").addEventListener("click", this.next); } });
+
+// ---- warm-ups ----
+steps.push(choiceStep("warmup1", `
+  <div class="card"><p class="q">A fair coin will be flipped once.
+    Heads: you win <b class="hl">&euro;110</b>. Tails: you lose <b class="hl">&euro;100</b>.
+    Do you accept the bet?</p></div>`,
+  [{v:"accept",t:"Accept"},{v:"reject",t:"Reject"}]));
+steps.push(choiceStep("warmup2", `
+  <div class="card"><p class="q">A fair coin will be flipped once.
+    Heads: you win <b class="hl">&euro;10,000,000</b>. Tails: you lose <b class="hl">&euro;1,000</b>.
+    Do you accept the bet?</p></div>`,
+  [{v:"accept",t:"Accept"},{v:"reject",t:"Reject"}]));
+
+// ---- allocation rounds ----
+ROUNDS.forEach(rd => {
+  const reframed = (rd.r === 25);
+  steps.push({ label:`Allocation round ${rd.r} of 25`, html: () => reframed ? `
+  <div class="card">
+    <p class="q">You have <b>100 tokens</b> to divide between <b>Account A</b> and <b>Account B</b>.
+       A single draw will select one of the two accounts, each with probability one half.</p>
+    <p>Each token in <b class="hl">Account A</b> is worth <b class="hl">&euro;${rd.q1.toFixed(3)}</b>, credited only
+       if Account A is selected.<br>
+       Each token in <b class="hl">Account B</b> is worth <b class="hl">&euro;${rd.q2.toFixed(3)}</b>, credited only
+       if Account B is selected.<br>
+       You must place all 100 tokens.</p>
+    <p class="q">How many tokens do you place in Account A?</p>
+    <input type="number" id="tk" min="0" max="100" step="any"> <span class="muted">of 100</span>
+    <div class="nav"><button class="next" id="n">Continue</button><span class="err"></span></div>
+  </div>` : `
+  <div class="card">
+    <p class="q">A fair coin will be flipped <b>once</b>. You have <b>100 tokens</b> to divide between two accounts.</p>
+    <p>Each token in <b class="hl">Account H</b> pays <b class="hl">&euro;${rd.q1.toFixed(3)}</b> if the coin lands
+       <b>Heads</b>, and nothing otherwise.<br>
+       Each token in <b class="hl">Account T</b> pays <b class="hl">&euro;${rd.q2.toFixed(3)}</b> if the coin lands
+       <b>Tails</b>, and nothing otherwise.<br>
+       You must place all 100 tokens.</p>
+    <p class="q">How many tokens do you place in Account H?</p>
+    <input type="number" id="tk" min="0" max="100" step="any"> <span class="muted">of 100</span>
+    <div class="nav"><button class="next" id="n">Continue</button><span class="err"></span></div>
+  </div>`,
+  bind(){ this.next = () => {
+      const v = numVal("tk", 0, 100);
+      if (v === null) return fail("A number from 0 to 100.");
+      R["r" + rd.r] = v; advance(); };
+    document.getElementById("n").addEventListener("click", this.next); } });
+});
+
+// ---- valuations ----
+GOODS.forEach(g => {
+  steps.push({ label:"Valuation", html: () => {
+    const wta = FRAME[R.version][g] === "WTA";
+    return `<div class="card">
+      <p class="q">${ wta
+        ? `What is the <b class="hl">smallest amount you would accept</b>, in &euro; per year, to give up all access to <b>${GOOD_LABEL[g]}</b> for one year?`
+        : `What is the <b class="hl">most you would pay</b>, in &euro; per year, to keep access to <b>${GOOD_LABEL[g]}</b>?` }</p>
+      <input type="number" id="val" min="0" step="any"> <span class="muted">&euro; per year</span>
+      <div class="nav"><button class="next" id="n">Continue</button><span class="err"></span></div>
+    </div>`; },
+  bind(){ this.next = () => {
+      const v = numVal("val", 0, 1e12);
+      if (v === null) return fail("A number, 0 or more.");
+      R["val_" + g] = v; advance(); };
+    document.getElementById("n").addEventListener("click", this.next); } });
+});
+
+// ---- jars ----
+const jarIntro = `<p class="muted">Two jars each contain 100 balls. <b>Jar K</b> contains exactly
+  50 red and 50 black. <b>Jar U</b> contains 100 balls, each red or black, in unknown proportion.
+  In each question you win &euro;100 if the named ball is drawn from the jar you choose.</p>`;
+steps.push(choiceStep("urn_red", `
+  <div class="card">${jarIntro}<p class="q">You win if the ball is <b class="hl">red</b>. Draw from which jar?</p></div>`,
+  [{v:"K",t:"Jar K (50/50)"},{v:"U",t:"Jar U (unknown)"}]));
+steps.push(choiceStep("urn_black", `
+  <div class="card">${jarIntro}<p class="q">You win if the ball is <b class="hl">black</b>. Draw from which jar?</p></div>`,
+  [{v:"K",t:"Jar K (50/50)"},{v:"U",t:"Jar U (unknown)"}]));
+
+// ---- finish: submit automatically, fall back to download ----
+steps.push({ label:"Finish", html: () => `
+  <div class="card">
+    <h2>That's everything</h2>
+    <p id="fin">Sending your responses&hellip;</p>
+    <div id="finbox"></div>
+  </div>`,
+  bind(){
+    R.finished = new Date().toISOString();
+    const payload = JSON.stringify(R);
+    const box = document.getElementById("finbox");
+    const fin = document.getElementById("fin");
+    const offerDownload = () => {
+      fin.textContent = "Download your responses.";
+      box.innerHTML = `<button class="dlbtn" id="dl">Download my responses</button>
+        <p class="muted" id="dlnote"></p>`;
+      document.getElementById("dl").addEventListener("click", () => {
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(new Blob([payload], {type:"application/json"}));
+        a.download = `quiz_${R.id}.json`; a.click();
+        prog.style.width = "100%";
+        document.getElementById("dlnote").textContent =
+          `Saved as quiz_${R.id}.json — upload it to ${CONFIG.fallbackUpload}, and keep your ID.`;
+      });
+    };
+    if (!CONFIG.endpoint) { offerDownload(); return; }
+    fetch(CONFIG.endpoint, {method:"POST", mode:"no-cors",
+        headers:{"Content-Type":"text/plain;charset=utf-8"}, body: payload})
+      .then(() => {
+        prog.style.width = "100%"; stepLbl.textContent = "";
+        fin.innerHTML = `Submitted — thank you. Keep your ID (<code>${R.id}</code>)
+          somewhere you'll find it later in the course.`;
+      })
+      .catch(offerDownload);
+  } });
+
+render();
+</script>
+</body>
+</html>
