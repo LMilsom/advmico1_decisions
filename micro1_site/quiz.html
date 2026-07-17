@@ -82,37 +82,37 @@
 "use strict";
 
 const CONFIG = {
-  endpoint: "https://script.google.com/macros/s/AKfycbwtFjcKbigaJjZwyAo_Ic7her1uPg0x1WNL29KaeD1KJ5pR5QOHNzi7fPKMn6gTltI2/exec",   // <-- paste Apps Script web-app URL here; empty = download fallback
-  fallbackUpload: "email your csv to luke.heathmilsom@kuleuven.be",
+  endpoint: "",   // <-- paste Apps Script web-app URL here; empty = download fallback
+  fallbackUpload: "the Session 1 dropbox on the course Moodle page",
 };
 
-// per-round payout rates (euros per token)
+// per-round payout rates (whole euros per token)
 const ROUNDS = [
-    {r:1,q1:1.919,q2:0.464},
-    {r:2,q1:0.265,q2:0.844},
-    {r:3,q1:1.241,q2:0.589},
-    {r:4,q1:0.353,q2:0.900},
-    {r:5,q1:0.479,q2:1.741},
-    {r:6,q1:0.343,q2:0.357},
-    {r:7,q1:0.516,q2:1.111},
-    {r:8,q1:0.412,q2:0.360},
-    {r:9,q1:0.630,q2:0.387},
-    {r:10,q1:0.316,q2:0.317},
-    {r:11,q1:1.501,q2:0.666},
-    {r:12,q1:1.909,q2:0.818},
-    {r:13,q1:0.597,q2:0.583},
-    {r:14,q1:1.240,q2:1.461},
-    {r:15,q1:0.898,q2:0.511},
-    {r:16,q1:1.412,q2:1.812},
-    {r:17,q1:1.126,q2:0.636},
-    {r:18,q1:0.802,q2:0.312},
-    {r:19,q1:0.516,q2:1.276},
-    {r:20,q1:0.635,q2:0.923},
-    {r:21,q1:1.031,q2:0.386},
-    {r:22,q1:1.915,q2:0.260},
-    {r:23,q1:0.608,q2:0.724},
-    {r:24,q1:0.353,q2:0.900},
-    {r:25,q1:1.909,q2:0.818}
+    {r:1,q1:8,q2:2},
+    {r:2,q1:3,q2:10},
+    {r:3,q1:11,q2:5},
+    {r:4,q1:2,q2:5},
+    {r:5,q1:3,q2:11},
+    {r:6,q1:9,q2:9},
+    {r:7,q1:5,q2:11},
+    {r:8,q1:8,q2:7},
+    {r:9,q1:8,q2:5},
+    {r:10,q1:8,q2:8},
+    {r:11,q1:9,q2:4},
+    {r:12,q1:7,q2:3},
+    {r:13,q1:2,q2:2},
+    {r:14,q1:6,q2:7},
+    {r:15,q1:7,q2:4},
+    {r:16,q1:7,q2:9},
+    {r:17,q1:7,q2:4},
+    {r:18,q1:5,q2:2},
+    {r:19,q1:2,q2:5},
+    {r:20,q1:7,q2:10},
+    {r:21,q1:8,q2:3},
+    {r:22,q1:7,q2:1},
+    {r:23,q1:5,q2:6},
+    {r:24,q1:2,q2:5},
+    {r:25,q1:7,q2:3}
 ];
 
 const GOODS = ["search", "email", "maps", "social"];
@@ -204,9 +204,9 @@ ROUNDS.forEach(rd => {
   <div class="card">
     <p class="q">You have <b>100 tokens</b> to divide between <b>Account A</b> and <b>Account B</b>.
        A single draw will select one of the two accounts, each with probability one half.</p>
-    <p>Each token in <b class="hl">Account A</b> is worth <b class="hl">&euro;${rd.q1.toFixed(3)}</b>, credited only
+    <p>Each token in <b class="hl">Account A</b> is worth <b class="hl">&euro;${rd.q1}</b>, credited only
        if Account A is selected.<br>
-       Each token in <b class="hl">Account B</b> is worth <b class="hl">&euro;${rd.q2.toFixed(3)}</b>, credited only
+       Each token in <b class="hl">Account B</b> is worth <b class="hl">&euro;${rd.q2}</b>, credited only
        if Account B is selected.<br>
        You must place all 100 tokens.</p>
     <p class="q">How many tokens do you place in Account A?</p>
@@ -215,9 +215,9 @@ ROUNDS.forEach(rd => {
   </div>` : `
   <div class="card">
     <p class="q">A fair coin will be flipped <b>once</b>. You have <b>100 tokens</b> to divide between two accounts.</p>
-    <p>Each token in <b class="hl">Account H</b> pays <b class="hl">&euro;${rd.q1.toFixed(3)}</b> if the coin lands
+    <p>Each token in <b class="hl">Account H</b> pays <b class="hl">&euro;${rd.q1}</b> if the coin lands
        <b>Heads</b>, and nothing otherwise.<br>
-       Each token in <b class="hl">Account T</b> pays <b class="hl">&euro;${rd.q2.toFixed(3)}</b> if the coin lands
+       Each token in <b class="hl">Account T</b> pays <b class="hl">&euro;${rd.q2}</b> if the coin lands
        <b>Tails</b>, and nothing otherwise.<br>
        You must place all 100 tokens.</p>
     <p class="q">How many tokens do you place in Account H?</p>
