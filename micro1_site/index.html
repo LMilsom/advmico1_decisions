@@ -169,7 +169,6 @@
     color:var(--teal0);
   }
   .note{margin:.5rem 0 0; font-size:12.5px; color:var(--grayline); line-height:1.45}
-  .mwg{width:88px; font-size:13.5px; font-weight:600; white-space:nowrap}
 
   /* download pills */
   .dl{
@@ -207,25 +206,43 @@
 
   /* ---------- responsive ---------- */
   @media (max-width:860px){
+    h1{font-size:1.42rem}
+    .when{font-size:13px}
     thead{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)}
-    table,tbody,tr,td{display:block; width:auto}
-    tbody tr{
-      border-bottom:1px solid var(--rule); padding:1.25rem 0 1.5rem;
-      display:grid; grid-template-columns:30px 1fr; column-gap:.5rem;
+    table,tbody,tr,td{display:block}
+    .when-cell,.session,.readings,td.qcell{width:auto; min-width:0}
+    tbody tr{border-bottom:1px solid var(--rule); padding:1.15rem 0 1.4rem}
+    tbody td{border:0; padding:0 0 .6rem}
+    tbody tr:hover td{background:transparent}
+
+    /* section start: heavy rule on the card, question block first inside it */
+    tr.sec{border-top:3px solid var(--ink)}
+    tr.sec td{border-top:0}
+    td.qcell{
+      border-right:0; padding:.2rem 0 .95rem; margin:0 0 .95rem;
+      border-bottom:1px solid var(--rule);
     }
-    tbody td{border:0; padding:0 0 .55rem}
-    .num{grid-row:1/span 4; width:auto}
-    .when-cell,.session,.mwg,.readings{width:auto}
+    td.qcell p{margin:0 0 .55rem}
+    td.qcell .qspan{margin-bottom:.55rem}
+
+    /* Lecture # · date · time on one wrapping line */
+    .when-cell{white-space:normal; padding-bottom:.65rem}
+    .lecno{display:inline-block; margin:0 .55rem 0 0}
     .when-cell .time{display:inline; margin-left:.4rem}
-    .mwg::before{content:"MWG "; font-size:9.5px; letter-spacing:.1em; color:var(--grayline)}
-    .readings dl{grid-template-columns:52px 1fr}
+
+    .readings dl{grid-template-columns:74px 1fr}
+
+    /* practical / exercise tint becomes a clean full-card band */
+    tr.doing{background:var(--sand); border-radius:4px;
+             padding-left:.85rem; padding-right:.85rem}
+    tr.doing td{background:transparent}
+    tbody tr.doing:hover td{background:transparent}
   }
 
   /* ---------- print ---------- */
   @media print{
     body{padding:0; font-size:9pt}
     .masthead{padding:0 0 .8rem}
-    .actions{display:none}
     tbody tr{break-inside:avoid}
     tr.doing td{background:none; box-shadow:inset 3px 0 0 var(--rust)}
     .dl{border:0; padding:0; color:var(--ink)}
@@ -270,7 +287,6 @@
       <th scope="col">Questions</th>
       <th scope="col">When</th>
       <th scope="col">Session</th>
-      <th scope="col">MWG</th>
       <th scope="col">Readings</th>
     </tr>
   </thead>
@@ -286,11 +302,9 @@
       <a class="dl" href="pdf/L1_preference_choice_demand.pdf">Slides &darr;</a>
       <a class="dl" href="quiz.html">Quiz</a>
     </td>
-    <td class="mwg">1 (all)<br>2 (all)</td>
     <td class="readings"><dl>
-      <dt>Core</dt><dd>Choi, Kariv, Müller &amp; Silverman (AER 2014), introduction + Table 1</dd>
-      <dt>Additional</dt><dd>Chen, Liu, Shan, Zhong &amp; Zhou (PNAS 2023); Jensen–Miller (AER 2008); Saez (2010); Rubinstein, <em>Economic Fables</em> — free, and he argues against his own axioms</dd>
-      <dt>Text</dt><dd>Kreps, <em>Microeconomic Foundations I</em>, Ch. 1–4</dd>
+      <dt>Papers</dt><dd><b>Choi, Kariv, Müller &amp; Silverman (AER 2014), introduction + Table 1</b>; Chen, Liu, Shan, Zhong &amp; Zhou (PNAS 2023); Jensen–Miller (AER 2008); Saez (2010); Rubinstein, <em>Economic Fables</em> — free, and he argues against his own axioms</dd>
+      <dt>Text</dt><dd><b>MWG Ch. 1 and 2 (all)</b>; Kreps, <em>Microeconomic Foundations I</em>, Ch. 1–4</dd>
       <dt>Online</dt><dd><a href="https://ocw.mit.edu/courses/14-121-microeconomic-theory-i-fall-2015/">MIT OCW 14.121 (Wolitzky)</a>, Lec. 1–3</dd>
     </dl></td>
   </tr>
@@ -303,11 +317,9 @@
       <p class="note">Monotonicity and convexity; Debreu’s theorem; UMP: x(p,w) and v(p,w); Cobb–Douglas; EMP: h(p,u) and e(p,u); concavity of e; the duality identities; CES</p>
       <a class="dl" href="pdf/L2_ump_emp.pdf">Slides &darr;</a>
     </td>
-    <td class="mwg">3.A–3.E</td>
     <td class="readings"><dl>
-      <dt>Core</dt><dd>Hausman (AER 1981), §I–II</dd>
-      <dt>Additional</dt><dd>Deaton &amp; Muellbauer (AER 1980) — a parameterised <em>e</em>(p,u) in the wild; Rubinstein, “Dilemmas of an Economic Theorist” (Econometrica 2006)</dd>
-      <dt>Text</dt><dd>Jehle &amp; Reny, Ch. 1 (gentler, more worked)</dd>
+      <dt>Papers</dt><dd><b>Hausman (AER 1981), §I–II</b>; Deaton &amp; Muellbauer (AER 1980) — a parameterised <em>e</em>(p,u) in the wild; Rubinstein, “Dilemmas of an Economic Theorist” (Econometrica 2006)</dd>
+      <dt>Text</dt><dd><b>MWG 3.A–3.E</b>; Jehle &amp; Reny, Ch. 1 (gentler, more worked)</dd>
       <dt>Online</dt><dd><a href="https://nmiller.web.illinois.edu/notes.html">Nolan Miller, <em>Notes on Microeconomic Theory</em></a>, Ch. 3</dd>
     </dl></td>
   </tr>
@@ -320,11 +332,9 @@
       <p class="note">Envelope theorem; Shephard’s lemma; Roy’s identity; the Slutsky equation; properties of S; substitution vs. income effects; net vs. gross substitutes</p>
       <a class="dl" href="pdf/L3_duality_slutsky.pdf">Slides &darr;</a>
     </td>
-    <td class="mwg">3.F–3.G</td>
     <td class="readings"><dl>
-      <dt>Core</dt><dd>Hausman (AER 1981), §III to end</dd>
-      <dt>Additional</dt><dd>Aguiar &amp; Serrano (JET 2017); Kahneman, <em>Thinking, Fast and Slow</em>, Part 4</dd>
-      <dt>Text</dt><dd>Deaton &amp; Muellbauer, <em>Economics and Consumer Behavior</em>, Ch. 2–3</dd>
+      <dt>Papers</dt><dd><b>Hausman (AER 1981), §III to end</b>; Aguiar &amp; Serrano (JET 2017); Kahneman, <em>Thinking, Fast and Slow</em>, Part 4</dd>
+      <dt>Text</dt><dd><b>MWG 3.F–3.G</b>; Deaton &amp; Muellbauer, <em>Economics and Consumer Behavior</em>, Ch. 2–3</dd>
       <dt>Online</dt><dd><a href="https://web.stanford.edu/~jdlevin/Econ%20202/Consumer%20Theory.pdf">Levin &amp; Milgrom, “Consumer Theory” notes (Stanford)</a></dd>
     </dl></td>
   </tr>
@@ -338,11 +348,9 @@
       <a class="dl" href="pdf/PA_handout.pdf">Handout &darr;</a>
       <span class="dl pending">Data in session</span>
     </td>
-    <td class="mwg">1.C recap<br>3.J preview</td>
     <td class="readings"><dl>
-      <dt>Core</dt><dd>Choi, Kariv, Müller &amp; Silverman (AER 2014), in full</dd>
-      <dt>Additional</dt><dd>Varian (1982), §1–2; Bronars (1987); Chen et al. (2023)</dd>
-      <dt>Text</dt><dd>Chambers &amp; Echenique, <em>Revealed Preference Theory</em>, Ch. 3–4</dd>
+      <dt>Papers</dt><dd><b>Choi, Kariv, Müller &amp; Silverman (AER 2014), in full</b>; Varian (1982), §1–2; Bronars (1987); Chen et al. (2023)</dd>
+      <dt>Text</dt><dd><b>MWG 1.C (recap), 3.J (preview)</b>; Chambers &amp; Echenique, <em>Revealed Preference Theory</em>, Ch. 3–4</dd>
       <dt>Online</dt><dd>No template code and no packages — just confirm R starts on your laptop <strong>before</strong> the session</dd>
     </dl></td>
   </tr>
@@ -355,11 +363,9 @@
       <p class="note">Integrability; money-metric utility; CV and EV; deadweight loss; bunching at kinks; new goods and price indices; Afriat’s theorem; the CCEI formally</p>
       <a class="dl" href="pdf/L4_welfare_afriat.pdf">Slides &darr;</a>
     </td>
-    <td class="mwg">3.H–3.J</td>
     <td class="readings"><dl>
-      <dt>Core</dt><dd class="empty">—</dd>
-      <dt>Additional</dt><dd>Varian (Econometrica 1982), §1–2; Saez (2010); Chetty et al. (QJE 2011); Brynjolfsson, Collis &amp; Eggers (2019); Coyle, <em>GDP: A Brief but Affectionate History</em>; Boskin et al. (JEP 1998)</dd>
-      <dt>Text</dt><dd>Chambers &amp; Echenique, <em>Revealed Preference Theory</em>, Ch. 1–4</dd>
+      <dt>Papers</dt><dd>Varian (Econometrica 1982), §1–2; Saez (2010); Chetty et al. (QJE 2011); Brynjolfsson, Collis &amp; Eggers (2019); Coyle, <em>GDP: A Brief but Affectionate History</em>; Boskin et al. (JEP 1998)</dd>
+      <dt>Text</dt><dd><b>MWG 3.H–3.J</b>; Chambers &amp; Echenique, <em>Revealed Preference Theory</em>, Ch. 1–4</dd>
       <dt>Online</dt><dd><a href="https://ocw.mit.edu/courses/14-121-microeconomic-theory-i-fall-2015/">MIT OCW 14.121</a>, welfare &amp; revealed-preference lectures</dd>
     </dl></td>
   </tr>
@@ -373,11 +379,9 @@
       <a class="dl" href="pdf/EC1_problems.pdf">Sheet &darr;</a>
       <span class="dl pending">Solutions after class</span>
     </td>
-    <td class="mwg">1–3</td>
     <td class="readings"><dl>
-      <dt>Core</dt><dd class="empty">—</dd>
-      <dt>Additional</dt><dd class="empty">—</dd>
-      <dt>Text</dt><dd class="empty">—</dd>
+      <dt>Papers</dt><dd class="empty">—</dd>
+      <dt>Text</dt><dd><b>MWG Ch. 1–3</b></dd>
       <dt>Online</dt><dd class="empty">—</dd>
     </dl></td>
   </tr>
@@ -391,11 +395,9 @@
       <p class="note">Netputs; production sets and their properties; PMP; the profit function; Hotelling’s lemma; the law of supply; aggregation of supply vs. demand</p>
       <a class="dl" href="pdf/L5_production_pmp.pdf">Slides &darr;</a>
     </td>
-    <td class="mwg">5.A–5.C<br>5.E</td>
     <td class="readings"><dl>
-      <dt>Core</dt><dd>Syverson (JEL 2011), §1–2</dd>
-      <dt>Additional</dt><dd>Kirman (JEP 1992); Varian (1984); Hayek, “The Use of Knowledge in Society” (1945)</dd>
-      <dt>Text</dt><dd>Varian, <em>Microeconomic Analysis</em>, Ch. 1–5</dd>
+      <dt>Papers</dt><dd><b>Syverson (JEL 2011), §1–2</b>; Kirman (JEP 1992); Varian (1984); Hayek, “The Use of Knowledge in Society” (1945)</dd>
+      <dt>Text</dt><dd><b>MWG 5.A–5.C, 5.E</b>; Varian, <em>Microeconomic Analysis</em>, Ch. 1–5</dd>
       <dt>Online</dt><dd><a href="https://felixmunozgarcia.com/econs-501/">Muñoz-Garcia, EconS 501</a>, production slides</dd>
     </dl></td>
   </tr>
@@ -408,11 +410,9 @@
       <p class="note">CMP; conditional factor demands; the cost function; cost curves; LeChatelier; wedges and MRP dispersion; efficiency and supporting prices; objectives of the firm</p>
       <a class="dl" href="pdf/L6_cost_markups.pdf">Slides &darr;</a>
     </td>
-    <td class="mwg">5.C–5.D<br>5.F–5.G</td>
     <td class="readings"><dl>
-      <dt>Core</dt><dd>Hsieh &amp; Klenow (QJE 2009), §I–II</dd>
-      <dt>Additional</dt><dd>Bils–Klenow–Ruane (2021); Hart &amp; Zingales (2017); Coase, “The Nature of the Firm” (1937) — the question 5.G reopens</dd>
-      <dt>Text</dt><dd>Varian, <em>Microeconomic Analysis</em>, Ch. 4–6</dd>
+      <dt>Papers</dt><dd><b>Hsieh &amp; Klenow (QJE 2009), §I–II</b>; Bils–Klenow–Ruane (2021); Hart &amp; Zingales (2017); Coase, “The Nature of the Firm” (1937) — the question 5.G reopens</dd>
+      <dt>Text</dt><dd><b>MWG 5.C–5.D, 5.F–5.G</b>; Varian, <em>Microeconomic Analysis</em>, Ch. 4–6</dd>
       <dt>Online</dt><dd><a href="https://people.tamu.edu/~gtian/teaching_and_class_materials.html">Tian (Texas A&amp;M)</a>, production notes</dd>
     </dl></td>
   </tr>
@@ -426,11 +426,9 @@
       <a class="dl" href="pdf/EC2_problems.pdf">Sheet &darr;</a>
       <span class="dl pending">Solutions after class</span>
     </td>
-    <td class="mwg">5</td>
     <td class="readings"><dl>
-      <dt>Core</dt><dd class="empty">—</dd>
-      <dt>Additional</dt><dd class="empty">—</dd>
-      <dt>Text</dt><dd class="empty">—</dd>
+      <dt>Papers</dt><dd class="empty">—</dd>
+      <dt>Text</dt><dd><b>MWG Ch. 5</b></dd>
       <dt>Online</dt><dd class="empty">—</dd>
     </dl></td>
   </tr>
@@ -444,11 +442,9 @@
       <p class="note">Lotteries; the independence axiom; the expected utility theorem; Allais; risk aversion; certainty equivalents and risk premia; Arrow–Pratt; CARA and CRRA; Pratt’s theorem</p>
       <a class="dl" href="pdf/L7_expected_utility.pdf">Slides &darr;</a>
     </td>
-    <td class="mwg">6.A–6.C</td>
     <td class="readings"><dl>
-      <dt>Core</dt><dd>Choi, Fisman, Gale &amp; Kariv (AER 2007), introduction + §I</dd>
-      <dt>Additional</dt><dd>Sydnor (AEJ: Applied 2010); Chetty (AER 2006); Rabin &amp; Thaler (JEP 2001) — the dead-parrot paper</dd>
-      <dt>Text</dt><dd>Gollier, <em>The Economics of Risk and Time</em>, Ch. 1–2</dd>
+      <dt>Papers</dt><dd><b>Choi, Fisman, Gale &amp; Kariv (AER 2007), introduction + §I</b>; Sydnor (AEJ: Applied 2010); Chetty (AER 2006); Rabin &amp; Thaler (JEP 2001) — the dead-parrot paper</dd>
+      <dt>Text</dt><dd><b>MWG 6.A–6.C</b>; Gollier, <em>The Economics of Risk and Time</em>, Ch. 1–2</dd>
       <dt>Online</dt><dd><a href="https://arielrubinstein.tau.ac.il/">Rubinstein, <em>Lecture Notes in Microeconomic Theory</em></a> (free on his site), risk chapters</dd>
     </dl></td>
   </tr>
@@ -461,11 +457,9 @@
       <p class="note">FOSD, SOSD, mean-preserving spreads; state-contingent commodities; the insurance theorem; the Baily–Chetty formula; subjective expected utility; Ellsberg</p>
       <a class="dl" href="pdf/L8_dominance_ambiguity.pdf">Slides &darr;</a>
     </td>
-    <td class="mwg">6.D–6.F</td>
     <td class="readings"><dl>
-      <dt>Core</dt><dd>Chetty (JPubE 2006), introduction + the formula (§1–2)</dd>
-      <dt>Additional</dt><dd>Barseghyan et al. (AER 2013); Atkinson (JET 1970); Gilboa &amp; Schmeidler (1989); Kay &amp; King, <em>Radical Uncertainty</em> — or just what Daniel Ellsberg did next</dd>
-      <dt>Text</dt><dd>Wakker, <em>Prospect Theory: For Risk and Ambiguity</em>, Ch. 1–2</dd>
+      <dt>Papers</dt><dd><b>Chetty (JPubE 2006), introduction + the formula (§1–2)</b>; Barseghyan et al. (AER 2013); Atkinson (JET 1970); Gilboa &amp; Schmeidler (1989); Kay &amp; King, <em>Radical Uncertainty</em> — or just what Daniel Ellsberg did next</dd>
+      <dt>Text</dt><dd><b>MWG 6.D–6.F</b>; Wakker, <em>Prospect Theory: For Risk and Ambiguity</em>, Ch. 1–2</dd>
       <dt>Online</dt><dd><a href="https://www.aeaweb.org/articles?id=10.1257/jep.1.1.121">Machina, “Choice under Uncertainty” (JEP 1987)</a></dd>
     </dl></td>
   </tr>
@@ -479,11 +473,9 @@
       <a class="dl" href="pdf/EC3_problems.pdf">Sheet &darr;</a>
       <span class="dl pending">Past papers soon</span>
     </td>
-    <td class="mwg">6<br>1–3, 5</td>
     <td class="readings"><dl>
-      <dt>Core</dt><dd class="empty">—</dd>
-      <dt>Additional</dt><dd class="empty">—</dd>
-      <dt>Text</dt><dd class="empty">—</dd>
+      <dt>Papers</dt><dd class="empty">—</dd>
+      <dt>Text</dt><dd><b>MWG Ch. 6 (and 1–3, 5)</b></dd>
       <dt>Online</dt><dd class="empty">—</dd>
     </dl></td>
   </tr>
