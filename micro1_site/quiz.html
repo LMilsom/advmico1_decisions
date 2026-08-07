@@ -88,31 +88,16 @@ const CONFIG = {
 
 // per-round payout rates (whole euros per token)
 const ROUNDS = [
-    {r:1,q1:8,q2:2},
-    {r:2,q1:3,q2:10},
-    {r:3,q1:11,q2:5},
-    {r:4,q1:2,q2:5},
-    {r:5,q1:3,q2:11},
-    {r:6,q1:9,q2:9},
-    {r:7,q1:5,q2:11},
-    {r:8,q1:8,q2:7},
-    {r:9,q1:8,q2:5},
-    {r:10,q1:8,q2:8},
-    {r:11,q1:9,q2:4},
-    {r:12,q1:7,q2:3},
-    {r:13,q1:2,q2:2},
-    {r:14,q1:6,q2:7},
-    {r:15,q1:7,q2:4},
-    {r:16,q1:7,q2:9},
-    {r:17,q1:7,q2:4},
-    {r:18,q1:5,q2:2},
-    {r:19,q1:2,q2:5},
-    {r:20,q1:7,q2:10},
-    {r:21,q1:8,q2:3},
-    {r:22,q1:7,q2:1},
-    {r:23,q1:5,q2:6},
-    {r:24,q1:2,q2:5},
-    {r:25,q1:7,q2:3}
+    {r:1,q1:13,q2:2},
+    {r:2,q1:4,q2:8},
+    {r:3,q1:2,q2:11},
+    {r:4,q1:5,q2:6},
+    {r:5,q1:11,q2:3},
+    {r:6,q1:1,q2:14},
+    {r:7,q1:15,q2:1},
+    {r:8,q1:9,q2:4},
+    {r:9,q1:3,q2:9},
+    {r:10,q1:7,q2:5},
 ];
 
 const GOODS = ["search", "email", "maps", "social"];
@@ -181,38 +166,14 @@ steps.push({ label:"Your anonymous ID", html: () => `
       if (!/^[A-Z0-9]{4,12}$/.test(v)) return fail("Letters and numbers only, 4 to 12 characters.");
       R.id = v;
       const h = [...v].reduce((a, c) => a + c.charCodeAt(0), 0);
-      R.version = (h % 2 === 1) ? "A" : "B";
+      // R.version = (h % 2 === 1) ? "A" : "B";
       advance(); };
     document.getElementById("n").addEventListener("click", this.next); } });
 
 // ---- warm-ups ----
-steps.push(choiceStep("warmup1", `
-  <div class="card"><p class="q">A fair coin will be flipped once.
-    Heads: you win <b class="hl">&euro;110</b>. Tails: you lose <b class="hl">&euro;100</b>.
-    Do you accept the bet?</p></div>`,
-  [{v:"accept",t:"Accept"},{v:"reject",t:"Reject"}]));
-steps.push(choiceStep("warmup2", `
-  <div class="card"><p class="q">A fair coin will be flipped once.
-    Heads: you win <b class="hl">&euro;10,000,000</b>. Tails: you lose <b class="hl">&euro;1,000</b>.
-    Do you accept the bet?</p></div>`,
-  [{v:"accept",t:"Accept"},{v:"reject",t:"Reject"}]));
-
 // ---- allocation rounds ----
 ROUNDS.forEach(rd => {
-  const reframed = (rd.r === 25);
-  steps.push({ label:`Allocation round ${rd.r} of 25`, html: () => reframed ? `
-  <div class="card">
-    <p class="q">You have <b>100 tokens</b> to divide between <b>Account A</b> and <b>Account B</b>.
-       A single draw will select one of the two accounts, each with probability one half.</p>
-    <p>Each token in <b class="hl">Account A</b> is worth <b class="hl">&euro;${rd.q1}</b>, credited only
-       if Account A is selected.<br>
-       Each token in <b class="hl">Account B</b> is worth <b class="hl">&euro;${rd.q2}</b>, credited only
-       if Account B is selected.<br>
-       You must place all 100 tokens.</p>
-    <p class="q">How many tokens do you place in Account A?</p>
-    <input type="number" id="tk" min="0" max="100" step="any"> <span class="muted">of 100</span>
-    <div class="nav"><button class="next" id="n">Continue</button><span class="err"></span></div>
-  </div>` : `
+  steps.push({ label:`Allocation round ${rd.r} of 10`, html: () => `
   <div class="card">
     <p class="q">A fair coin will be flipped <b>once</b>. You have <b>100 tokens</b> to divide between two accounts.</p>
     <p>Each token in <b class="hl">Account H</b> pays <b class="hl">&euro;${rd.q1}</b> if the coin lands
@@ -231,36 +192,6 @@ ROUNDS.forEach(rd => {
     document.getElementById("n").addEventListener("click", this.next); } });
 });
 
-// ---- valuations ----
-GOODS.forEach(g => {
-  steps.push({ label:"Valuation", html: () => {
-    const wta = FRAME[R.version][g] === "WTA";
-    return `<div class="card">
-      <p class="q">${ wta
-        ? `What is the <b class="hl">smallest amount you would accept</b>, in &euro; per year, to give up all access to <b>${GOOD_LABEL[g]}</b> for one year?`
-        : `What is the <b class="hl">most you would pay</b>, in &euro; per year, to keep access to <b>${GOOD_LABEL[g]}</b>?` }</p>
-      <input type="number" id="val" min="0" step="any"> <span class="muted">&euro; per year</span>
-      <div class="nav"><button class="next" id="n">Continue</button><span class="err"></span></div>
-    </div>`; },
-  bind(){ this.next = () => {
-      const v = numVal("val", 0, 1e12);
-      if (v === null) return fail("A number, 0 or more.");
-      R["val_" + g] = v; advance(); };
-    document.getElementById("n").addEventListener("click", this.next); } });
-});
-
-// ---- jars ----
-const jarIntro = `<p class="muted">Two jars each contain 100 balls. <b>Jar K</b> contains exactly
-  50 red and 50 black. <b>Jar U</b> contains 100 balls, each red or black, in unknown proportion.
-  In each question you win &euro;100 if the named ball is drawn from the jar you choose.</p>`;
-steps.push(choiceStep("urn_red", `
-  <div class="card">${jarIntro}<p class="q">You win if the ball is <b class="hl">red</b>. Draw from which jar?</p></div>`,
-  [{v:"K",t:"Jar K (50/50)"},{v:"U",t:"Jar U (unknown)"}]));
-steps.push(choiceStep("urn_black", `
-  <div class="card">${jarIntro}<p class="q">You win if the ball is <b class="hl">black</b>. Draw from which jar?</p></div>`,
-  [{v:"K",t:"Jar K (50/50)"},{v:"U",t:"Jar U (unknown)"}]));
-
-// ---- finish: submit automatically, fall back to download ----
 steps.push({ label:"Finish", html: () => `
   <div class="card">
     <h2>That's everything</h2>
