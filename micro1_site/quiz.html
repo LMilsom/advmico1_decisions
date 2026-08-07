@@ -142,13 +142,10 @@ function choiceStep(key, html, opts){
 // ---- intro + ID ----
 steps.push({ label:"Before you start", html: () => `
   <div class="card">
-    <h2>Twenty minutes of decisions</h2>
-    <p>Around thirty short questions: allocation problems and a few quick choices.
+    <h2>Ten minutes of decisions</h2>
+    <p>Ten short questions. Answer carefully and slowly.
        <b class="hl">There are no right answers</b> — choose what you actually prefer.</p>
-    <p>Your responses are <b>anonymous</b>, ungraded, and become part of a class dataset
-       this course returns to during the term. You may stop at any point without penalty;
-       partial responses are discarded.</p>
-    <p class="muted">Work alone and in one sitting. Numbers can be entered with decimals.</p>
+    <p>Your responses are <b>anonymous</b>.</p>
     <div class="nav"><button class="next" id="go">Begin</button></div>
   </div>`,
   bind(){ document.getElementById("go").addEventListener("click", advance); } });
